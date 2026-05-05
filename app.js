@@ -415,7 +415,6 @@ function filteredQuestions() {
   const ordered = orderedQuestions();
   if (state.filter === "unit01") return ordered.filter((question) => question.unit === "Unit 01");
   if (state.filter === "unit02") return ordered.filter((question) => question.unit === "Unit 02");
-  if (state.filter === "mistakes") return ordered.filter((question) => question.isMistake);
   if (state.filter === "failed") {
     return ordered.filter((question) => {
       const progress = state.data.progress[question.id];
@@ -534,8 +533,7 @@ function render() {
         ${renderFilter("all", "All", questions.length)}
         ${renderFilter("unit01", "Unit 01", unit01.length)}
         ${renderFilter("unit02", "Unit 02", unit02.length)}
-        ${renderFilter("mistakes", "Mistakes only", questions.filter((question) => question.isMistake).length)}
-        ${renderFilter("failed", "Failed review", needsReview().length)}
+        ${renderFilter("failed", "Needs review", needsReview().length)}
       </nav>
 
       <section class="grid" aria-label="Question cards">
@@ -586,8 +584,8 @@ function renderQuestionCard(question) {
       <h3>${escapeHtml(question.title)}</h3>
       <p class="card-text">${escapeHtml(question.text)}</p>
       <div class="card-foot">
-        <span>${canRetry ? "Retry this item" : question.isMistake ? "Mistake check + justification" : "Truth check"}</span>
-        <span>${scoreLabel}</span>
+        <span>${canRetry ? "Retry this item" : "Review statement"}</span>
+        <span>${progress ? scoreLabel : "Up to 2 pts"}</span>
       </div>
     </button>
   `;
